@@ -35,8 +35,8 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public List<CommentDto> getCommentsByPostId(long id) {
-        List<Comment> comments = commentRepository.findByPostId(id);
+    public List<CommentDto> getCommentsByPostId(long postId) {
+        List<Comment> comments = commentRepository.findByPostId(postId);
         return comments.stream()
                 .map(comment -> mapToDto(comment)).collect(Collectors.toList());
     }
@@ -48,8 +48,8 @@ public class CommentServiceImpl implements CommentService {
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(()-> new ResourceNotFoundException("Comment", "id", commentId));
 
-        if(comment.getPost().getId().equals(post.getId())){
-            throw new BlogAPIException(HttpStatus.BAD_REQUEST,"Comment dosen belong to post");
+        if (!comment.getPost().getId().equals(post.getId())) {
+            throw new BlogAPIException(HttpStatus.BAD_REQUEST, "Comment doesn't belong to post");
         }
 
         return mapToDto(comment);
@@ -62,8 +62,8 @@ public class CommentServiceImpl implements CommentService {
         Comment existingComment = commentRepository.findById(commentId)
                 .orElseThrow(()-> new ResourceNotFoundException("Comment", "id", commentId));
 
-        if(existingComment.getPost().getId().equals(post.getId())){
-            throw new BlogAPIException(HttpStatus.BAD_REQUEST,"Comment dosen belong to post");
+        if (!existingComment.getPost().getId().equals(post.getId())) {
+            throw new BlogAPIException(HttpStatus.BAD_REQUEST, "Comment doesn't belong to post");
         }
         existingComment.setName(commentRequest.getName());
         existingComment.setBody(commentRequest.getBody());
@@ -79,7 +79,7 @@ public class CommentServiceImpl implements CommentService {
                 .orElseThrow(()-> new ResourceNotFoundException("Post", "id", postId));
         Comment existingComment = commentRepository.findById(commentId)
                 .orElseThrow(()-> new ResourceNotFoundException("Comment", "id", commentId));
-        if(existingComment.getPost().getId().equals(post.getId())){
+        if(!existingComment.getPost().getId().equals(post.getId())){
             throw new BlogAPIException(HttpStatus.BAD_REQUEST,"Comment dosen belong to post");
         }
 
