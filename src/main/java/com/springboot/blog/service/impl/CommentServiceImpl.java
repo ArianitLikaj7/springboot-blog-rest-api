@@ -5,11 +5,9 @@ import com.springboot.blog.entity.Post;
 import com.springboot.blog.exception.BlogAPIException;
 import com.springboot.blog.exception.ResourceNotFoundException;
 import com.springboot.blog.payload.CommentDto;
-import com.springboot.blog.payload.PostDto;
 import com.springboot.blog.repository.CommentRepository;
 import com.springboot.blog.repository.PostRepository;
 import com.springboot.blog.service.CommentService;
-import com.springboot.blog.service.PostService;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -55,6 +53,37 @@ public class CommentServiceImpl implements CommentService {
         }
 
         return mapToDto(comment);
+    }
+
+    @Override
+    public CommentDto updateComment(Long postId, Long commentId, CommentDto commentRequest) {
+        Post post = postRepository.findById(postId)
+                .orElseThrow(()-> new ResourceNotFoundException("Post", "id", postId));
+        Comment existingComment = commentRepository.findById(commentId)
+                .orElseThrow(()-> new ResourceNotFoundException("Comment", "id", commentId));
+
+        if(existingComment.getPost().getId().equals(post.getId())){
+            throw new BlogAPIException(HttpStatus.BAD_REQUEST,"Comment dosen belong to post");
+        }
+        existingComment.setName(commentRequest.getName());
+        existingComment.setBody(commentRequest.getBody());
+        existingComment.setEmail(commentRequest.getEmail());
+        existingComment = commentRepository.save(existingComment);
+        return mapToDto(existingComment);
+
+    }
+
+    @Override
+    public void deleteComment(Long postId, Long commentId) {
+        Post post = postRepository.findById(postId)
+                .orElseThrow(()-> new ResourceNotFoundException("Post", "id", postId));
+        Comment existingComment = commentRepository.findById(commentId)
+                .orElseThrow(()-> new ResourceNotFoundException("Comment", "id", commentId));
+        if(existingComment.getPost().getId().equals(post.getId())){
+            throw new BlogAPIException(HttpStatus.BAD_REQUEST,"Comment dosen belong to post");
+        }
+
+        commentRepository.deleteById(commentId);
     }
 
     private CommentDto mapToDto(Comment comment){
