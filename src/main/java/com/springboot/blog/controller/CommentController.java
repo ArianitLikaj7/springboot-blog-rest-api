@@ -3,7 +3,6 @@ package com.springboot.blog.controller;
 import com.springboot.blog.payload.CommentDto;
 import com.springboot.blog.service.CommentService;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,5 +27,12 @@ public class CommentController {
     @GetMapping("/{postId}/byPostId")
     public ResponseEntity<List<CommentDto>>getCommentByPostId(@PathVariable Long postId){
         return new ResponseEntity<>(commentService.getCommentsByPostId(postId),HttpStatus.OK);
+    }
+
+    @GetMapping("/posts/{postId}/comments/{id}")
+    public ResponseEntity<CommentDto> getCommentById(@PathVariable(value = "postId") Long postId,
+                                                     @PathVariable(value = "commentId") Long commentId){
+    CommentDto commentDto = commentService.getCommentById(postId,commentId);
+    return new ResponseEntity<>(commentDto,HttpStatus.OK);
     }
 }
