@@ -1,7 +1,7 @@
 package com.springboot.blog.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -12,7 +12,6 @@ import java.util.Set;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-
 @Entity
 @Table(
         name = "posts", uniqueConstraints = {@UniqueConstraint(columnNames = {"title"})}
@@ -20,9 +19,7 @@ import java.util.Set;
 public class Post {
 
     @Id
-    @GeneratedValue(
-            strategy = GenerationType.SEQUENCE
-    )
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 
     @Column(name = "title", nullable = false)

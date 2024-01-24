@@ -9,6 +9,7 @@ import com.springboot.blog.payload.CommentDto;
 import com.springboot.blog.repository.CommentRepository;
 import com.springboot.blog.repository.PostRepository;
 import com.springboot.blog.service.CommentService;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -28,7 +29,7 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public CommentDto createPost(long postId, CommentDto commentDto) {
+    public CommentDto createComment(long postId, CommentDto commentDto) {
         Comment comment = commentMapper.mapToEntity(commentDto);
         Post post = postRepository.findById(postId)
                 .orElseThrow(()-> new ResourceNotFoundException("Post", "id", postId));
@@ -54,7 +55,6 @@ public class CommentServiceImpl implements CommentService {
         if (!comment.getPost().getId().equals(post.getId())) {
             throw new BlogAPIException(HttpStatus.BAD_REQUEST, "Comment doesn't belong to post");
         }
-
         return commentMapper.mapToDto(comment);
     }
 
@@ -85,7 +85,6 @@ public class CommentServiceImpl implements CommentService {
         if(!existingComment.getPost().getId().equals(post.getId())){
             throw new BlogAPIException(HttpStatus.BAD_REQUEST,"Comment dosen belong to post");
         }
-
         commentRepository.deleteById(commentId);
     }
 

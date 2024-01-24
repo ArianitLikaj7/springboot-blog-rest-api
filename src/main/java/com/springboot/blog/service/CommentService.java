@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.concurrent.CompletionException;
 
 public interface CommentService {
-    CommentDto createPost(long postId, CommentDto commentDto);
+    CommentDto createComment(long postId, CommentDto commentDto);
     List<CommentDto> getCommentsByPostId(long postId);
     CommentDto getCommentById(Long postId, Long commentId);
     CommentDto updateComment(Long postId, Long commentId, CommentDto commentRequest);
