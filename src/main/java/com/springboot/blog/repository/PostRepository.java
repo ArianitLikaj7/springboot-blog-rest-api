@@ -7,6 +7,4 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 
 public interface PostRepository extends JpaRepository<Post,Long> {
-    @Query("SELECT DISTINCT p FROM Post p LEFT JOIN FETCH p.comments")
-    List<Post> findAllWithComments();
 }
