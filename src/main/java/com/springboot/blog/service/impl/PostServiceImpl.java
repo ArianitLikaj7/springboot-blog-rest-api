@@ -28,12 +28,8 @@
 
         @Override
         public PostDto createPost(PostDto postDto) {
-
-            // convert DTO to entity
             Post post = postMapper.mapToEntity(postDto);
             Post newPost = postRepository.save(post);
-
-            // convert entity to dto with id included
             return postMapper.mapToDto(newPost);
         }
 
@@ -71,4 +67,3 @@
             postRepository.deleteById(id);
         }
     }
-
